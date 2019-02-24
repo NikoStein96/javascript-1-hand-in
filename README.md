@@ -370,3 +370,85 @@ alert("my car is  " + mycar.color + "  " + mycar.make);
 ![javscript](http://exploringjs.com/impatient-js/img-book/c3d3200e87d0fb399346597fe342ca5c4bb69d0e.svg)
 
 + Different proposals all go through stages, There are five stages: a strawman stage, and 4 “maturity” stages. The TC39 committee must approve acceptance for each stage.
+
+## Callback, promises and Async await
+### How callback hell looks 
+```javascript
+fs.readdir(source, function (err, files) {
+  if (err) {
+    console.log('Error finding files: ' + err)
+  } else {
+    files.forEach(function (filename, fileIndex) {
+      console.log(filename)
+      gm(source + filename).size(function (err, values) {
+        if (err) {
+          console.log('Error identifying file size: ' + err)
+        } else {
+          console.log(filename + ' : ' + values)
+          aspect = (values.width / values.height)
+          widths.forEach(function (width, widthIndex) {
+            height = Math.round(width / aspect)
+            console.log('resizing ' + filename + 'to ' + height + 'x' + height)
+            this.resize(width, height).write(dest + 'w' + width + '_' + filename, function(err) {
+              if (err) console.log('Error writing file: ' + err)
+            })
+          }.bind(this))
+        }
+      })
+    })
+  }
+})
+```
+
+### Promises avoid the callback hell by being more readable
+
+```javascript 
+someAsyncOperation(someParams)
+.then(function(result){
+    // Do something with the result
+})
+.catch(function(error){
+    // Handle error
+});
+```
++ This way is much more readable, but can stille be confusing if there were to be way more .then  added to the code. 
+
+### Implement our own promise solution
+
+```javascript
+function getData() {
+    return new Promise((resolve, reject)=>{
+        $.ajax({
+            url: `http://www.omdbapi.com/?t=The+Matrix`,
+            method: 'GET'
+            }).done((response)=>{
+                //this means my api call suceeded, so I will call resolve on the response
+                resolve(response);
+            }).fail((error)=>{
+                //this means the api call failed, so I will call reject on the error
+                reject(error);
+            });
+    });
+}
+```
++ This function returns a new promise, which we can call .then on if we want more things to happen when this function is done.
+
+### Example(s) that demonstrate error handling with promises
+
+```javascript
+function getData() {
+    return new Promise((resolve, reject)=>{
+        $.ajax({
+            url: `http://www.omdbapi.com/?t=The+Matrix`,
+            method: 'GET'
+            }).done((response)=>{
+                //this means my api call suceeded, so I will call resolve on the response
+                resolve(response);
+            }).fail((error)=>{
+                //this means the api call failed, so I will call reject on the error
+                reject(error);
+            });
+    });
+}
+```
++ Let's say somethings goes wrong in the ajax call, then the ajax call would enter .fail with error and then call reject(error), meaning the promise was rejected and then the function returns the error
