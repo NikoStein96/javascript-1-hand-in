@@ -141,3 +141,232 @@ function foo(a, b, c) {
 doSomething(foo);
 ```
 + user defined callbacks are a good way to avoid writing redundant code. We can create one function, but we can tell that function to do different things.
+
+### Explain the methods map, filter and reduce
+```javascript
+//map 
+const numbers = [2, 4, 8, 10];
+const halves = numbers.map(x => x / 2);
+// halves is [1, 2, 4, 5]
+
+//filter
+const words = ["spray", "limit", "elite", "exuberant", "destruction", "present"];
+
+const longWords = words.filter(word => word.length > 6);
+// longWords is ["exuberant", "destruction", "present"]
+
+//reduce
+const total = [0, 1, 2, 3].reduce((sum, value) => sum + value, 1);
+// total is 7
+```
+
+### Provide examples of user-defined reusable modules implemented in Node.js
+```javascript
+function Person(name, age) {
+        var name = name;
+        var age = age;
+
+        return {
+            setName: function(value) {
+                name = value;
+            },
+            setAge: function(value) {
+                age = value;
+            },
+            getInfo: function() {
+                return {
+                    name: name,
+                    age: age
+                }
+            }
+        };
+    }
+
+    module.exports = Person;
+```
++ Can then be imported in another js file with require('./person.js')
+
+## ES6,7,8... and TypeScript
+
+### Provide examples and explain the es2015 features: let, arrow functions, this, rest parameters, de-structuring assignments, maps/sets etc.
+
+### Let
+```javascript
+let i = 5;
+for (let i = 0; i < 10; i++) {
+  // some statements
+}
+// Here i is 5
+```
++ Let has block-scope which means it cannot be accessed outside a block  {
+
+### Arrow function
+
+```javascript
+var materials = [
+  'Hydrogen',
+  'Helium',
+  'Lithium',
+  'Beryllium'
+];
+
+console.log(materials.map(material => material.length));
+// expected output: Array [8, 6, 7, 9]
+```
++ An arrow function expression is a syntactically compact alternative to a regular function expression, although without its own bindings to the this, arguments, super, or new.target keywords. Arrow function expressions are ill suited as methods, and they cannot be used as constructors.
+
+### This
+
+It has different values depending on where it is used:
+
++ In a method, this refers to the owner object.
++ Alone, this refers to the global object.
++ In a function, this refers to the global object.
++ In a function, in strict mode, this is undefined.
++ In an event, this refers to the element that received the event.
++ Methods like call(), and apply() can refer this to any object.
+
+
+### Rest Paramaters
+```javascript
+function sum(...theArgs) {
+  return theArgs.reduce((previous, current) => {
+    return previous + current;
+  });
+}
+
+console.log(sum(1, 2, 3));
+// expected output: 6
+```
+
+### Destructuring
+
+```javascript
+var x = [1, 2, 3, 4, 5];
+var [y, z] = x;
+console.log(y); // 1
+console.log(z); // 2
+```
++ A nice way to assign a known value to a new variable
+
+### Maps
+
+```javascript
+var myMap = new Map();
+
+var keyString = 'a string',
+    keyObj = {},
+    keyFunc = function() {};
+
+// setting the values
+myMap.set(keyString, "value associated with 'a string'");
+myMap.set(keyObj, 'value associated with keyObj');
+myMap.set(keyFunc, 'value associated with keyFunc');
+
+myMap.size; // 3
+
+// getting the values
+myMap.get(keyString);    // "value associated with 'a string'"
+myMap.get(keyObj);       // "value associated with keyObj"
+myMap.get(keyFunc);      // "value associated with keyFunc"
+
+myMap.get('a string');   // "value associated with 'a string'"
+                         // because keyString === 'a string'
+myMap.get({});           // undefined, because keyObj !== {}
+myMap.get(function() {}); // undefined, because keyFunc !== function () {}
+```
+### Explain and demonstrate how es2015 supports modules (import and export) similar to what is offered by NodeJS.
+Export
+```javascript
+//------ lib.js ------
+    export const sqrt = Math.sqrt;
+    export function square(x) {
+        return x * x;
+    }
+    export function diag(x, y) {
+        return sqrt(square(x) + square(y));
+    }
+```
+
+Import
+```javascript
+    import { square, diag } from 'lib';
+    console.log(square(11)); // 121
+    console.log(diag(4, 3)); // 5
+```
+### Provide an example of ES6 inheritance and reflect over the differences between Inheritance in Java and in ES6.
+
+Class definition
+```javascript
+class Shape {
+    constructor (id, x, y) {
+        this.id = id
+        this.move(x, y)
+    }
+    move (x, y) {
+        this.x = x
+        this.y = y
+    }
+}
+```
+
+Inheritance example
+```javascript
+class Rectangle extends Shape {
+    constructor (id, x, y, width, height) {
+        super(id, x, y)
+        this.width  = width
+        this.height = height
+    }
+}
+class Circle extends Shape {
+    constructor (id, x, y, radius) {
+        super(id, x, y)
+        this.radius = radius
+    }
+}
+```
+
+### Provide a number of examples to demonstrate the benefits of using TypeScript, including, types, interfaces, classes and generics
+```javascript
+Class Employee  {
+            private firstName: string;
+            private lastName: string;
+            private email: string;
+            private address: string;
+}
+```
++ With classes we get a more java like feel to it.
+
+```javascript
+interface Vehicle {
+color: string;
+make: string;
+}
+class Car implements Vehicle {
+color: string;
+make: string;
+constructor(color: string, make:string) {
+    this.color = color;
+    this.make = make;
+}
+}
+```
++ The implements also has similarities to java.
+
+```javascript
+function makeCar(car: T) {
+   return car;
+}
+let v = new Car("Blue", "Ford");
+let mycar = makeCar(v);
+alert("my car is  " + mycar.color + "  " + mycar.make);
+```
+
++The advantage of using “Generics” is that you can tell the compiler up front what the type is going to be. This will make program run a little bit faster, as “Object Type” has already been identified during compile time. Take a look at the following code for how to use a generic:
+
+### Explain the ECMAScript Proposal Process for how new features are added to the language (the TC39 Process)
+
+![javscript](http://exploringjs.com/impatient-js/img-book/c3d3200e87d0fb399346597fe342ca5c4bb69d0e.svg)
+
++ Different proposals all go through stages, There are five stages: a strawman stage, and 4 “maturity” stages. The TC39 committee must approve acceptance for each stage.
