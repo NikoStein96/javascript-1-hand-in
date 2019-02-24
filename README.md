@@ -25,3 +25,119 @@
 ### Explain the purpose of “use strict” and Linters, exemplified with ESLint 
 + Linters are used for catching syntax errors and other stuff. It can also read your code, and see that what you have typed is maybe not what you really ment and therefore suggest something else that makes more sense. It's a good tool, that takes time to use but saves you time debugging. 
 
+## Explain using sufficient code examples the following features in JavaScript. 
+
+### Variable/function-Hoisting
+```javascript
+console.log("Example 1:");
+decLater = 5;
+console.log('------------------------------------');
+console.log("x should be 5, eventough it's not declared yet.");
+console.log("x is:" + x);
+console.log('------------------------------------');
+decLater x;
+console.log('------------------------------------');
+```
++ As we see in the code even though i declared the variable later it still contained the value it was assigned earlier. Which is what hoisting is, in JavaScript we can declare functions and variables independent of when they are used.
+
+### this in JavaScript and how it differs from what we know from Java/.net.
+```javascript
+/**
+ * A function's this keyword behaves a little differently in JavaScript compared to other 
+ * languages. In most cases, the value of this is determined by how a function is called. 
+ * It can't be set by assignment during execution, and it may be different each time the 
+ * function is called.
+*/
+
+console.log('------------------------------------');
+console.log("This Explained:");
+console.log('------------------------------------');
+
+// Example 1 (Global Context):
+// In the global execution context (outside of any function),
+// this refers to the global object, whether in strict mode or not.
+console.log(this.document === document); // true
+
+// In web browsers, the window object is also the global object:
+console.log(this === window); // true
+
+this.a = 37;
+console.log(window.a); // 37
+//Example 2 (Shadowing this):
+
+function Car(make,model) {
+  this.make = make;
+  this.model = model;
+  this.show = function(){setTimeout(function(){ //This function gets it's own "this"
+    console.log(this.make + ", " + this.model);
+  },0)};
+}
+var car = new Car("Volvo","V70");
+car.show(); //undefined, undefined
+```
++ In java the this keyword is global
+
+### Function Closures and the JavaScript Module Pattern
+```javascript
+var add = (function () {
+  var counter = 0;
+  return function () {counter += 1; return counter}
+})();
+```
++ the counter in add work just like how private in Java works, now we can only access the counter variable by calling the add function we can't alter the counter variable directly.
+
+### Javascript Module Pattern
+```javascript
+function greeter(name) {
+        var name = name;
+        return {
+            greeting: function() {
+                return "Hi " + name;
+            }
+        }
+    }
+    console.log(greeter("Jens").greeting());
+```
++ The objective is to hide the variable accessibility from the outside world. 
+
+
+### Immediately-Invoked Function Expressions (IIFE)
+```javascript
+(() => {
+	console.log("This function gets called immediately");
+})();
+```
++ self explanatory, the last parentheses make sure the function is called immediately.
+
+### JavaScripts Prototype
+```javascript
+function Person(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+}
+
+Person.prototype.name = function() {
+  return this.firstName + " " + this.lastName;
+};
+```
++ The prototype make us able to add new properties to the objects constructor.
+
+### User-defined Callback Functions (writing your own functions that take a callback)
+```javascript 
+function doSomething(callback) {
+    // ...
+
+    // Call the callback
+    callback('stuff', 'goes', 'here');
+}
+
+function foo(a, b, c) {
+    // I'm the callback
+    alert(a + " " + b + " " + c);
+}
+
+doSomething(foo);
+```
++ user defined callbacks are a good way to avoid writing redundant code. We can create one function, but we can tell that function to do different things.
